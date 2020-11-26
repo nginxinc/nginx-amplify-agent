@@ -127,6 +127,10 @@ class PHPFPMConfig(object):
                     self._structure[context]['pm.status_path'].append(
                         _get_value(line)
                     )
+                elif line.startswith('pm.status_listen'):
+                    self._structure[context]['pm.status_listen'].append(
+                        _get_value(line)
+                    )
 
     def _find_includes(self):
         """
@@ -179,7 +183,9 @@ class PHPFPMConfig(object):
         for pool_name in pool_names:
             # Get first found value for interesting directives.  If there are
             # no found directives just set to None
-            listen = self._structure[pool_name]['listen'][0] \
+            listen = self._structure[pool_name]['pm.status_listen'][0] \
+                if len(self._structure[pool_name]['pm.status_listen']) else \
+                self._structure[pool_name]['listen'][0] \
                 if len(self._structure[pool_name]['listen']) else None
             status_path = self._structure[pool_name]['pm.status_path'][0] \
                 if len(self._structure[pool_name]['pm.status_path']) else None
