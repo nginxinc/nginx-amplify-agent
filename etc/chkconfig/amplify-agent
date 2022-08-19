@@ -1,0 +1,154 @@
+#!/bin/bash
+#
+# chkconfig: 2345 50 50
+# description: NGINX Amplify Agent
+#
+# processname: /usr/bin/nginx-amplify-agent.py
+# config: /etc/amplify-agent/agent.conf
+# pidfile: /var/run/amplify-agent/amplify-agent.pid
+
+### BEGIN INIT INFO
+# Provides: nginx-amplify-agent
+# Required-Start: $local_fs $network
+# Required-Stop: $local_fs $network
+# Should-Start: 
+# Should-Stop: 
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: start and stop nginx-amplify-agent daemon
+# Description: NGINX Amplify Agent daemon
+### END INIT INFO
+
+# source function library
+. /etc/init.d/functions
+
+RETVAL=0
+prog="nginx-amplify-agent"
+binary=/usr/bin/nginx-amplify-agent.py
+pidfile=/var/run/amplify-agent/amplify-agent.pid
+conffile=/etc/amplify-agent/agent.conf
+user=nginx
+debug_log="$2"
+
+if [ -f "$conffile" ]; then
+    config_amplify_user=`grep -v '#' ${conffile} | \
+                         grep -A 10 -i '\[.*nginx.*\]' | \
+                         grep -i 'user.*=' | \
+                         awk -F= '{print $2}' | \
+                         sed 's/ //g' | \
+                         head -1`
+    nginxconf=`grep -v '#' ${conffile} | \
+	       grep -A 10 -i '\[.*nginx.*\]' | \
+               grep -i 'configfile.*=' | \
+               awk -F= '{print $2}' | \
+               sed 's/ //g' | \
+               head -1`
+fi
+
+if [ -z "$nginxconf" ]; then
+    nginxconf=/etc/nginx/nginx.conf
+fi
+
+if [ -f "$nginxconf" ]; then
+    config_nginx_user=`grep 'user[[:space:]]' ${nginxconf} | \
+                       grep -v '[#].*user.*;' | \
+                       grep -v '_user' | \
+                       sed -n -e 's/.*\(user[[:space:]][[:space:]]*[^;]*\);.*/\1/p' | \
+                       awk '{ print $2 }' | head -1`
+fi
+
+if [ -n "$config_amplify_user" ]; then
+    user=$config_amplify_user
+else
+    test -n "$config_nginx_user" && \
+    user=$config_nginx_user
+fi
+
+start() {
+        [ -x $binary ] || exit 5
+        echo -n $"Starting $prog: "
+        if [ $UID -ne 0 ]; then
+                RETVAL=1
+                failure
+        else
+                mkdir -p /var/run/amplify-agent && chown $user /var/run/amplify-agent
+                chown -f $user /etc/amplify-agent/agent.conf
+                chown -f $user /var/log/amplify-agent/agent.log
+                daemon --user=$user $binary start --config=$conffile --pid=$pidfile
+        fi;
+        echo 
+        return $RETVAL
+}
+
+stop() {
+        echo -n $"Stopping $prog: "
+        if [ $UID -ne 0 ]; then
+                RETVAL=1
+                failure
+        else
+                killproc -p $pidfile $binary
+        fi;
+        echo
+        return $RETVAL
+}
+
+restart() {
+	stop
+	start
+}
+
+configtest() {
+        [ -x $binary ] || exit 5
+        if [ $UID -ne 0 ]; then
+                RETVAL=1
+                failure
+        else
+                $binary configtest --config=$conffile --pid=$pidfile
+                RETVAL=$?
+        fi;
+        return $RETVAL
+}
+
+debug() {
+        [ -x $binary ] || exit 5
+        if [ $UID -ne 0 ]; then
+                RETVAL=1
+                failure
+        else
+                $binary debug --config=$conffile --pid=$pidfile --log=$debug_log
+                RETVAL=$?
+        fi;
+        return $RETVAL
+}
+
+case "$1" in
+  start)
+	start
+	RETVAL=$?
+	;;
+  stop)
+	stop
+	RETVAL=$?
+	;;
+  restart)
+	restart
+	RETVAL=$?
+    ;;
+  status)
+    status -p $pidfile amplify-agent
+	RETVAL=$?
+    ;;
+  configtest)
+	configtest
+	RETVAL=$?
+	;;
+  debug)
+    debug
+    RETVAL=$?
+    ;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart|configtest|debug}"
+	RETVAL=2
+esac
+
+exit $RETVAL

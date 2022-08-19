@@ -1,0 +1,551 @@
+nginx-amplify-agent (1.8.0-2) stable; urgency=low
+
+  * Bug fixes
+  * Dependency update
+
+ -- Bill Beckelhimer <w.beckelhimer@f5.com>  Tue, 29 Mar 2022 11:15:00 -0800
+
+nginx-amplify-agent (1.8.0-1) stable; urgency=low
+
+  * agent version for Python 3
+
+ -- Andrei Belov <defan@nginx.com>  Thu,  9 Dec 2021 17:05:54 +0300
+
+nginx-amplify-agent (1.7.0-5) stable; urgency=low
+
+  * improved nginx-plus status URL discovery method
+  * updated crossplane, psutil, and requests modules
+  * init script fixed for Debian 10 "buster"
+
+ -- Andrei Belov <defan@nginx.com>  Mon, 23 Sep 2019 16:10:00 +0300
+
+nginx-amplify-agent (1.7.0-4) stable; urgency=low
+
+  * fixed agent's user auto-detection
+
+ -- Andrei Belov <defan@nginx.com>  Thu, 28 Mar 2019 12:00:00 +0300
+
+nginx-amplify-agent (1.7.0-1) stable; urgency=low
+
+  * Various bug fixes
+
+ -- Grant Hulegaard <grant.hulegaard@nginx.com>  Thu, 15 Nov 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.6.0-1) stable; urgency=low
+
+  * Added support for log formats with new line characters
+  * Various bug fixes
+
+ -- Grant Hulegaard <grant.hulegaard@nginx.com>  Thu, 20 Sep 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.5.0-1) stable; urgency=low
+
+  * Various bug fixes
+
+ -- Raymond Lau <raymond.lau@nginx.com>  Thu,  6 Sep 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.4.1-1) stable; urgency=low
+
+  * Various bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 26 Jul 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.4.0-1) stable; urgency=low
+
+  * New metrics for nginx, phpfpm, and mysql status
+  * Support monitoring of remote MySQL instances
+  * Added LAUNCHERS as a configurable parameter in the Agent config
+  * Various renaming of files and variables
+  * Various bug fixes
+
+ -- Grant Hulegaard <grant.hulegaard@nginx.com>  Thu,  8 Jun 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.3.0-1) stable; urgency=low
+
+  * New nginx metric: number of config reloads, cache max size
+  * Improvements to extension interface
+  * Improved nginx log detection
+  * Additional config reporting
+  * MySQL extension fixes and improvements
+  * Various bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 10 May 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.2.0-1) stable; urgency=low
+
+  * NGINX+ API support
+  * Ability to store UUID in the config file (if needed)
+  * Upgraded NGINX Crossplane parser
+  * Improved nginx logs parsing
+  * Various bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu,  5 Apr 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.1.0-1) stable; urgency=low
+
+  * MySQL monitoring support
+  * Improved nginx logs parsing
+  * Various bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Wed,  7 Feb 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.0.1-2) stable; urgency=low
+
+  * Postinst script fix
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 16 Jan 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.0.1-1) stable; urgency=low
+
+  * UUID bug fix
+
+ -- Mike Belov <dedm@nginx.com>  Tue,  9 Jan 2018 10:00:00 -0800
+
+nginx-amplify-agent (1.0.0-1) stable; urgency=low
+
+  * Support for additional NGINX+ objects (streams and slabs)
+  * NGINX Crossplane is the new config parser
+  * Updgraded gevent
+  * Special troubleshooter script
+  * No longer storing UUID in the config by default
+  * Various bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 26 Dec 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.47-1) unstable; urgency=low
+
+  * New config parser
+  * Debug mode
+  * Bug fix for error logging with PHP-FPM
+
+ -- Grant Hulegaard <grant.hulegaard@nginx.com>  Wed, 18 Oct 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.46-2) unstable; urgency=low
+
+  * Fixes for Centos6
+
+ -- Mike Belov <dedm@nginx.com>  Sat, 23 Sep 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.46-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Grant Hulegaard <grant.hulegaard@nginx.com>  Thu, 21 Sep 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.45-2) unstable; urgency=low
+
+  * Fixes for config parser
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 17 Aug 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.45-1) unstable; urgency=low
+
+  * PHP-FPM bug fixes
+  * Fixes for config parser
+
+ -- Mike Belov <dedm@nginx.com>  Wed,  9 Aug 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.44-2) unstable; urgency=low
+
+  * PHP-FPM bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Mon, 19 Jun 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.44-1) unstable; urgency=low
+
+  * PHP-FPM bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 15 Jun 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.43-1) unstable; urgency=low
+
+  * PHP-FPM bug fixes
+  * Memory leak fixes
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 18 May 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.42-2) unstable; urgency=low
+
+  * PHP-FPM bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Mon, 17 Apr 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.42-1) unstable; urgency=low
+
+  * PHP-FPM support
+  * Tags support
+  * Memory leak fixes
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Mon, 3 Apr 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.41-2) unstable; urgency=low
+
+  * Updated requests library (fixes some memory leaks)
+  * Fixes for config and nginx -V parsing
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 19 Jan 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.41-1) unstable; urgency=low
+
+  * Generic support for *nix systems
+  * Fixes for config parser
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 5 Jan 2017 10:00:00 -0800
+
+nginx-amplify-agent (0.40-2) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 8 Nov 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.40-1) unstable; urgency=low
+
+  * Syslog support
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 1 Nov 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.39-3) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 28 Sep 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.39-2) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 21 Sep 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.39-1) unstable; urgency=low
+
+  * Config parser improvements
+  * Log parser improvements
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 20 Sep 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.38-1) unstable; urgency=low
+
+  * FreeBSD support
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 25 Aug 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.37-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 28 Jul 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.36-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Mon, 18 Jul 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.35-1) unstable; urgency=low
+
+  * New metrics for NGINX+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 29 Jun 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.34-2) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 22 Jun 2016 16:00:00 -0800
+
+nginx-amplify-agent (0.34-1) unstable; urgency=low
+
+  * NGINX+ metrics aggregation support
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Fri, 10 Jun 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.33-3) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 5 May 2016 11:00:00 -0800
+
+nginx-amplify-agent (0.33-2) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 5 May 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.33-1) unstable; urgency=low
+
+  * NGINX+ objects support
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Fri, 29 Apr 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.32-1) unstable; urgency=low
+
+  * Bug fixes
+  * psutil==4.0.0 support
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 13 Apr 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.31-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 31 Mar 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.30-1) unstable; urgency=low
+
+  * Bug fixes
+  * Initial SSL analytics support
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 15 Mar 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.29-1) unstable; urgency=low
+
+  * Bug fixes
+  * NGINX+ status support improvements
+  * New NGINX metrics
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 11 Feb 2016 10:00:00 -0800
+
+nginx-amplify-agent (0.28-1) unstable; urgency=low
+
+  * Bug fixes
+  * Amazon Linux support
+  * Initial NGINX+ extended status support
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 19 Jan 2016 14:00:00 -0800
+
+nginx-amplify-agent (0.27-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 17 Dec 2015 14:00:00 -0800
+
+nginx-amplify-agent (0.26-1) unstable; urgency=low
+
+  * Bug fixes
+  * Automatic restart after installation
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 10 Dec 2015 14:00:00 -0800
+
+nginx-amplify-agent (0.25-1) unstable; urgency=low
+
+  * Bug fixes
+  * New metric: system.cpu.stolen
+  * Nginx config parsing improved
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 3 Dec 2015 11:00:00 -0800
+
+nginx-amplify-agent (0.24-2) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 24 Nov 2015 11:00:00 -0800
+
+nginx-amplify-agent (0.24-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 24 Nov 2015 10:00:00 -0800
+
+nginx-amplify-agent (0.23-1) unstable; urgency=low
+
+  * Bug fixes
+  * Ubuntu Wily support
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 18 Nov 2015 10:00:00 -0800
+
+nginx-amplify-agent (0.22-5) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Sun, 15 Nov 2015 8:00:00 -0800
+
+nginx-amplify-agent (0.22-4) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Fri, 13 Nov 2015 11:00:00 -0800
+
+nginx-amplify-agent (0.22-3) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 12 Nov 2015 17:00:00 -0800
+
+nginx-amplify-agent (0.22-2) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 11 Nov 2015 17:00:00 -0800
+
+nginx-amplify-agent (0.22-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Mon, 09 Nov 2015 07:00:00 -0800
+
+nginx-amplify-agent (0.21-3) unstable; urgency=low
+
+  * Additional events added
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 05 Nov 2015 11:00:00 -0800
+
+nginx-amplify-agent (0.21-2) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 04 Nov 2015 18:00:00 -0800
+
+nginx-amplify-agent (0.21-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Mon, 02 Nov 2015 13:00:00 -0800
+
+nginx-amplify-agent (0.20-1) unstable; urgency=low
+
+  * RPM support
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 28 Oct 2015 12:20:00 -0700
+
+nginx-amplify-agent (0.19-3) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Mon, 19 Oct 2015 18:40:00 -0700
+
+nginx-amplify-agent (0.19-2) unstable; urgency=low
+
+  * Bug fixes
+  * Agent status metric
+  * RPM-based systems support
+
+ -- Mike Belov <dedm@nginx.com>  Fri, 16 Oct 2015 17:35:00 -0700
+
+nginx-amplify-agent (0.19-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 13 Oct 2015 15:50:00 -0700
+
+nginx-amplify-agent (0.18-2) unstable; urgency=low
+
+  * Config parser updates
+  * Bug fixes
+  * Metrics updates
+
+ -- Mike Belov <dedm@nginx.com>  Fri, 02 Oct 2015 08:00:00 -0700
+
+nginx-amplify-agent (0.18-1) unstable; urgency=low
+
+  * Config parser updated
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 30 Sep 2015 16:00:00 -0700
+
+nginx-amplify-agent (0.17-3) unstable; urgency=low
+
+  * Config parser updated
+  * Apply config changes on the objects
+
+ -- Mike Belov <dedm@nginx.com>  Thu, 17 Sep 2015 17:00:00 +0300
+
+nginx-amplify-agent (0.17-2) unstable; urgency=low
+
+  * Config parser updated
+  * Improved disk io counters
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 16 Sep 2015 13:00:00 +0300
+
+nginx-amplify-agent (0.17-1) unstable; urgency=low
+
+  * Config parser update
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 15 Sep 2015 13:00:00 +0300
+
+nginx-amplify-agent (0.16-4) unstable; urgency=low
+
+  * Fixed error with multi-includes
+  * Fixed stub_status
+  * Fixed EC2
+
+ -- Mike Belov <dedm@nginx.com>  Fri, 11 Sep 2015 16:55:00 +0300
+
+nginx-amplify-agent (0.16-3) unstable; urgency=low
+
+  * Config parser update
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 9 Sep 2015 14:00:00 +0300
+
+nginx-amplify-agent (0.16-2) unstable; urgency=low
+
+  * Bugfixing
+
+ -- Mike Belov <dedm@nginx.com>  Tue, 8 Sep 2015 15:00:00 +0300
+
+nginx-amplify-agent (0.16-1) unstable; urgency=low
+
+  * Added logrotate
+  * Fixed nginx logs tailing
+
+ -- Mike Belov <dedm@nginx.com>  Mon, 7 Sep 2015 15:00:00 +0300
+
+nginx-amplify-agent (0.15-5) unstable; urgency=low
+
+  * Memory leak fix
+
+ -- Mike Belov <dedm@nginx.com>  Fri, 4 Sep 2015 12:30:00 +0300
+
+nginx-amplify-agent (0.15-4) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Sat, 29 Aug 2015 12:30:00 +0300
+
+nginx-amplify-agent (0.15-3) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Sat, 29 Aug 2015 12:30:00 +0300
+
+nginx-amplify-agent (0.15-2) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Sat, 29 Aug 2015 12:30:00 +0300
+
+nginx-amplify-agent (0.15-1) unstable; urgency=low
+
+  * New shiny metal name
+
+ -- Mike Belov <dedm@nginx.com>  Sat, 29 Aug 2015 12:30:00 +0300
+
+nginx-amplify-agent (0.14-2) unstable; urgency=low
+
+  * New receivamplify url
+
+ -- Mike Belov <dedm@nginx.com>  Fri, 28 Aug 2015 17:00:00 +0300
+
+nginx-amplify-agent (0.14-1) unstable; urgency=low
+
+  * Bug fixes
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 26 Aug 2015 14:00:00 +0300
+
+nginx-amplify-agent (0.13-1) unstable; urgency=low
+
+  * Events support
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 19 Aug 2015 12:00:00 +0300
+
+nginx-amplify-agent (0.12-1) unstable; urgency=low
+
+  * First release of amplify
+
+ -- Mike Belov <dedm@nginx.com>  Wed, 12 Aug 2015 12:00:00 +0300

@@ -1,0 +1,54 @@
+#!/bin/sh
+# postinst script for Nginx Amplify Agent
+
+agent_conf_file="/etc/amplify-agent/agent.conf"
+
+set -e
+
+if [ "$1" != "configure" ]; then
+    exit 0
+fi
+
+if [ -z "$2" ]; then
+    mkdir -p /var/run/amplify-agent && \
+    mkdir -p /var/log/amplify-agent && \
+    touch /var/log/amplify-agent/agent.log && \
+    chown nginx /var/run/amplify-agent && \
+    chown nginx /var/log/amplify-agent && \
+    chown nginx /var/run/amplify-agent /var/log/amplify-agent/agent.log
+    cd /usr/lib/python3/dist-packages/amplify/ && python3 -m compileall .
+else
+    if [ ! -f "${agent_conf_file}" ]; then
+        exit 0
+    fi
+
+    # Check for an older version of the agent running
+    if command -V pgrep > /dev/null 2>&1; then
+        agent_pid=`pgrep amplify-agent || true`
+    else
+        agent_pid=`ps aux | grep -i '[a]mplify-agent' | awk '{print $2}'`
+    fi
+
+    # stop it
+    if [ -n "$agent_pid" ]; then
+        service amplify-agent stop > /dev/null 2>&1 < /dev/null
+    fi
+
+    # change API URL to 1.4
+    sh -c "sed -i.old 's/api_url.*receiver.*$/api_url = https:\/\/receiver.amplify.nginx.com:443\/1.4/' \
+        ${agent_conf_file}"
+
+    # add PHP-FPM to config file
+    if ! grep -i phpfpm "${agent_conf_file}" > /dev/null 2>&1 ; then
+        sh -c "echo >> ${agent_conf_file}" && \
+        sh -c "echo '[extensions]' >> ${agent_conf_file}" && \
+        sh -c "echo 'phpfpm = True' >> ${agent_conf_file}"
+    fi
+
+    # restart it if it was stopped before
+    if [ -n "$agent_pid" ]; then
+        service amplify-agent start > /dev/null 2>&1
+    fi
+fi
+
+#DEBHELPER#

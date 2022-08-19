@@ -1,0 +1,58 @@
+#!/usr/bin/make -f
+
+INSTALLDIR = $(CURDIR)/debian/nginx-amplify-agent
+
+python-deps:
+	dh_testdir
+	python3 -m pip install --upgrade --target=amplify --no-compile -r %%REQUIREMENTS%%
+	touch $@
+
+build/lib/amplify: python-deps
+	dh_testdir
+	python3 setup.py build
+
+build-arch: build/lib/amplify
+	dh_testdir
+
+build-indep:
+	dh_testdir
+
+build: build-arch build-indep
+	dh_testdir
+
+install:
+	dh_testdir
+	python3 setup.py install --prefix=/usr --root=$(INSTALLDIR) --no-compile
+
+binary-indep: build install
+	dh_testdir
+	dh_python3
+	dh_installdebconf
+	dh_installinit -i -pnginx-amplify-agent --no-stop-on-upgrade --no-start --name=amplify-agent -- defaults 99 01
+	dh_installsystemd -pnginx-amplify-agent --name=amplify-agent --no-start amplify-agent.service
+
+binary-arch: install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs -a
+	dh_installdocs -a
+	dh_lintian -a
+	dh_link -aA
+	dh_compress -a
+	dh_fixperms -a
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb nginx-amplify-agent
+
+binary: binary-indep binary-arch
+
+clean:
+	dh_testdir
+	dh_testroot
+	dh_clean
+	rm -f python-deps
+	rm -rf build
+	rm -rf *.egg-info
+	find amplify/ -mindepth 1 -maxdepth 1 -type d -not -name agent -and -not -name ext -exec rm -rf {} \;

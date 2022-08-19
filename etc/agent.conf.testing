@@ -1,0 +1,98 @@
+[credentials]
+api_key =
+hostname =
+uuid =
+imagename =
+store_uuid = False
+
+[agent]
+launchers =
+
+[nginx]
+#user = nginx
+#configfile = /etc/nginx/nginx.conf
+#stub_status = /nginx_status
+#plus_status = /status
+#api = /api
+#exclude_logs =
+
+[proxies]
+https =
+
+[cloud]
+api_url =
+api_timeout =
+
+[extensions]
+phpfpm = True
+mysql = True
+
+[mysql]
+#host =
+#port =
+unix_socket = /var/run/mysqld/mysqld.sock
+user = amplify-agent
+password = amplify-agent
+remote = False
+
+[tags]
+tags = foo,bar,foo:bar
+
+[listeners]
+keys = syslog-default
+
+[listener_syslog-default]
+address =
+
+[loggers]
+keys = root,devnull,test-default
+
+[handlers]
+keys = root,devnull,test-default
+
+[formatters]
+keys = simpleFormatter
+
+[formatter_simpleFormatter]
+format = %(asctime)s [%(process)d] %(action_id)s %(threadName)s %(message)s
+datefmt =
+
+[logger_devnull]
+level = DEBUG
+qualname = devnull
+handlers = devnull
+formatter = simpleFormatter
+propagate = 0
+
+[handler_devnull]
+class = logging.handlers.WatchedFileHandler
+level = DEBUG
+formatter = simpleFormatter
+args = ('/dev/null',)
+
+[logger_root]
+level = DEBUG
+handlers = root
+qualname = root
+formatter = simpleFormatter
+propagate = 0
+
+[handler_root]
+class = StreamHandler
+level = DEBUG
+formatter = simpleFormatter
+args = (sys.stdout,)
+
+[logger_test-default]
+level = DEBUG
+qualname = test-default
+handlers = test-default
+formatter = simpleFormatter
+propagate = 0
+
+[handler_test-default]
+class = logging.handlers.WatchedFileHandler
+level = DEBUG
+formatter = simpleFormatter
+args = ('log/test.log', 'a', None, 1)
+

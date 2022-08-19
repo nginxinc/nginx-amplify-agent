@@ -1,0 +1,14 @@
+[Unit]
+Description=NGINX Amplify Agent
+Documentation=https://amplify.nginx.com/docs/
+After=network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/amplify-agent/amplify-agent.pid
+ExecStart=/etc/init.d/amplify-agent start
+ExecStop=/etc/init.d/amplify-agent stop
+
+[Install]
+WantedBy=multi-user.target

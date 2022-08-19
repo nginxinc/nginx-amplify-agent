@@ -1,0 +1,10 @@
+/var/log/amplify-agent/*.log
+{
+   copytruncate
+   daily
+   compress
+   missingok
+   rotate 5
+   nodateext
+   notifempty
+}

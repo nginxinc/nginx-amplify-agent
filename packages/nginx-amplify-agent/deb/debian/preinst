@@ -1,0 +1,43 @@
+#!/bin/sh
+# preinst script for Nginx Amplify Agent
+
+set -e
+
+addamplifyuser() {
+    # creating nginx group if he isn't already there
+    if ! getent group nginx >/dev/null; then
+        addgroup --system nginx >/dev/null
+    fi
+
+    # creating naas user if he isn't already there
+    if ! getent passwd nginx >/dev/null; then
+        adduser \
+          --system \
+          --disabled-login \
+          --ingroup nginx \
+          --no-create-home \
+          --home /nonexistent \
+          --gecos "nginx user" \
+          --shell /bin/false \
+          nginx  >/dev/null
+    fi
+}
+
+case "$1" in
+    install)
+        addamplifyuser
+        ;;
+    upgrade)
+        addamplifyuser
+        ;;
+    abort-upgrade)
+        ;;
+    *)
+        echo "preinst called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0
