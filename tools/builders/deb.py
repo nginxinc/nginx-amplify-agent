@@ -16,7 +16,8 @@ COMPAT_LEVELS = {
     'bionic': 11,
     'buster': 12,
     'focal': 12,
-    'bullseye': 13
+    'bullseye': 13,
+    'jammy': 13
 }
 
 
