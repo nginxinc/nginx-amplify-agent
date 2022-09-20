@@ -465,7 +465,7 @@ case "$os" in
         incr_step
 
         case "$codename" in
-            buster|bullseye|bionic|focal)
+            buster|bullseye|bionic|focal|jammy)
                 check_python 3
                 python_supported=3
                 ;;
