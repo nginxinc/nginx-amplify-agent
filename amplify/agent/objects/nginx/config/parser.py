@@ -66,7 +66,7 @@ def _iglob_pattern(pattern):
 
 
 def _getline(filename, lineno):
-    with open(filename, encoding='utf-8') as fp:
+    with open(filename, encoding='utf-8', errors='replace') as fp:
         for i, line in enumerate(fp, start=1):
             if i == lineno:
                 return line.rstrip('\r\n')
@@ -114,7 +114,7 @@ class NginxConfigParser(object):
         :param what: str - what action caused the error (used for logging)
         """
         exc_cls = e.__class__.__name__
-        exc_msg = e.strerror if hasattr(e, 'strerror') else e.message
+        exc_msg = e.strerror if hasattr(e, 'strerror') else str(e)
         message = 'failed to %s %s due to: %s' % (what, path, exc_cls)
         self.errors.append(message)
         if is_dir:
@@ -145,7 +145,7 @@ class NginxConfigParser(object):
             self._add_directory(dirname, check=True)
             try:
                 info = get_filesystem_info(filename)
-                info['lines'] = open(filename, encoding='utf-8').read().count('\n')
+                info['lines'] = open(filename, encoding='utf-8', errors='replace').read().count('\n')
                 self.files[filename] = info
             except Exception as e:
                 self._handle_error(filename, e, is_dir=False)
@@ -337,7 +337,7 @@ class NginxConfigParser(object):
             yield filename
             try:
                 # search each line for include or ssl_certificate directives
-                with open(filename, encoding='utf-8') as lines:
+                with open(filename, encoding='utf-8', errors='replace') as lines:
                     for line in lines:
                         if not has_directive(line):
                             continue

@@ -150,6 +150,11 @@ fi
 
 
 %changelog
+* Fri Sep 23 2022 Andrei Belov <a.belov@f5.com> 1.8.1-1
+- 1.8.1-1
+- crossplane updated to 0.5.8
+- fixed parsing of non-Unicode nginx configurations
+
 * Tue Mar 29 2022 Bill Beckelhimer <w.beckelhimer@f5.com> 1.8.0-2
 - 1.8.0-2
 - bug fixes
