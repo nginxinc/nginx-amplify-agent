@@ -64,10 +64,18 @@ def build(bumprevision=False):
         changelog_first_line = 'nginx-amplify-agent (%s-%s~%s) %s; urgency=low' % (version, bld, codename, codename)
         change_first_line('%s/debian/changelog' % debuild_root, changelog_first_line)
 
+        if bumprevision:
+            # sed version_build
+            shell_call('sed -i.bak -e "s,self.version_build =.*,self.version_build = %d," amplify/agent/common/context.py' % bld)
+
         # create source tarball
         shell_call('cp packages/nginx-amplify-agent/setup.py ./')
         shell_call('tar -cz --transform "s,^,nginx-amplify-agent-%s/," -f %s/nginx-amplify-agent_%s.orig.tar.gz LICENSE MANIFEST.in amplify/agent amplify/ext amplify/__init__.py etc/ packages/ nginx-amplify-agent.py setup.py' % (version, pkg_root, version))
         shell_call('cd %s && tar zxf nginx-amplify-agent_%s.orig.tar.gz' % (pkg_root, version))
+
+        if bumprevision:
+            # restore original version_build
+            shell_call('mv amplify/agent/common/context.py.bak amplify/agent/common/context.py')
 
         # create deb package
         shell_call('cd %s && debuild -us -uc' % debuild_root, terminal=True)

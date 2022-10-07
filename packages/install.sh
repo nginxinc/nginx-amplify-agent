@@ -48,6 +48,9 @@ get_os_name () {
         elif cat /etc/*-release | grep '^ID="almalinux"' > /dev/null 2>&1; then
             os="centos"
             centos_flavor="almalinux"
+        elif cat /etc/*-release | grep '^ID="rocky"' > /dev/null 2>&1; then
+            os="centos"
+            centos_flavor="rocky"
         else
             os=`cat /etc/*-release | grep '^ID=' | \
                 sed 's/^ID=["]*\([a-zA-Z]*\).*$/\1/' | \
@@ -79,11 +82,11 @@ get_os_name () {
                           tr '[:upper:]' '[:lower:]'`
                 ;;
             centos)
-                codename=`cat /etc/*-release | grep -i 'almalinux\|centos.*(' | \
+                codename=`cat /etc/*-release | grep -i 'almalinux\|rocky\|centos.*(' | \
                           sed 's/.*(\(.*\)).*/\1/' | head -1 | \
                           tr '[:upper:]' '[:lower:]'`
                 # For CentOS grab release
-                release=`cat /etc/*-release | grep -i 'almalinux\|centos.*[0-9]' | \
+                release=`cat /etc/*-release | grep -i 'almalinux\|rocky\|centos.*[0-9]' | \
                          sed 's/^[^0-9]*\([0-9][0-9]*\).*$/\1/' | head -1`
                 ;;
             rhel|ol)
