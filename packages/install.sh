@@ -86,8 +86,7 @@ get_os_name () {
                           sed 's/.*(\(.*\)).*/\1/' | head -1 | \
                           tr '[:upper:]' '[:lower:]'`
                 # For CentOS grab release
-                release=`cat /etc/*-release | grep -i 'almalinux\|rocky\|centos.*[0-9]' | \
-                         sed 's/^[^0-9]*\([0-9][0-9]*\).*$/\1/' | head -1`
+                release=`cat /etc/*-release | grep -i '^version_id=' | cut -d '"' -f 2 | cut -c 1`
                 ;;
             rhel|ol)
                 codename=`cat /etc/*-release | grep -i 'red hat.*(' | \
@@ -522,7 +521,7 @@ case "$os" in
         incr_step
 
         case "$os$release" in
-            rhel8|centos8|amzn2)
+            rhel8|rhel9|centos8|centos9|amzn2)
                 check_python 3
                 python_supported=3
                 ;;
