@@ -23,11 +23,20 @@ BuildRequires: python3-pip
 %if 0%{?amzn} >= 2
 Requires: python3 >= 3.7
 Requires: python3-requests
-%else
+%endif
+
+%if 0%{?rhel} == 8
 Requires: python3 >= 3.6
 Requires: python3-gevent
 Requires: python3-requests
 Requires: python3-netifaces
+%endif
+
+%if 0%{?rhel} == 9
+Requires: python3 >= 3.9
+Requires: python3-requests
+Requires: python3-netifaces
+Requires: python3-psutil
 %endif
 
 Requires: initscripts >= 8.36
@@ -50,12 +59,17 @@ See http://nginx.com/amplify for more information
 
 %prep
 %setup -q -n nginx-amplify-agent-%{version}
-cp -p %{SOURCE0} .
+%{__cp} -p %{SOURCE0} .
 
 
 %build
 %{__python3} -m pip install --upgrade --target=amplify --no-compile -r %%REQUIREMENTS%%
-%{__python3} -c 'import setuptools; exec(open("setup.py").read())' build
+%if 0%{?rhel} == 9
+# https://github.com/pypa/pip/issues/10629
+%{__python3} -m pip install --upgrade --target=amplify_ --no-compile zope.event
+%{__cp} -Pr amplify_/zope* amplify/
+%endif
+%{__python3} setup.py build
 
 
 %pre
