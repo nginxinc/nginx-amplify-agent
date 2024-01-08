@@ -17,7 +17,8 @@ COMPAT_LEVELS = {
     'buster': 12,
     'focal': 12,
     'bullseye': 13,
-    'jammy': 13
+    'jammy': 13,
+    'bookworm': 13,
 }
 
 

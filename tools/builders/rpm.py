@@ -45,8 +45,14 @@ def build(bumprevision=False):
             # sed version_build
             shell_call('sed -i.bak -e "s,self.version_build =.*,self.version_build = %d," amplify/agent/common/context.py' % bld)
 
+        versioned_setup_py = "setup-py{0}{1}.py".format(sys.version_info[0], sys.version_info[1])
+        if os.path.isfile("packages/nginx-amplify-agent/%s" % versioned_setup_py):
+            setup_py = "packages/nginx-amplify-agent/%s" % versioned_setup_py
+        else:
+            setup_py = "packages/nginx-amplify-agent/setup.py"
+
         # prepare sources
-        shell_call('cp packages/nginx-amplify-agent/setup.py ./')
+        shell_call('cp %s ./setup.py' % setup_py)
         shell_call('tar -cz --transform "s,^,nginx-amplify-agent-%s/," -f %s/nginx-amplify-agent-%s.tar.gz LICENSE MANIFEST.in amplify/agent amplify/ext amplify/__init__.py etc/ packages/ nginx-amplify-agent.py setup.py' % (version, rpm_sources, version))
         shell_call('cp packages/nginx-amplify-agent/rpm/nginx-amplify-agent.service %s' % rpm_sources)
 

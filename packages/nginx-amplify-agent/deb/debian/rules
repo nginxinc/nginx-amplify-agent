@@ -22,7 +22,7 @@ build: build-arch build-indep
 
 install:
 	dh_testdir
-	python3 setup.py install --prefix=/usr --root=$(INSTALLDIR) --no-compile
+	python3 setup.py install --prefix=/usr --install-scripts=/usr/bin --root=$(INSTALLDIR) --no-compile
 
 binary-indep: build install
 	dh_testdir
@@ -44,7 +44,7 @@ binary-arch: install
 	dh_shlibdeps -a
 	dh_gencontrol -a
 	dh_md5sums -a
-	dh_builddeb nginx-amplify-agent
+	dh_builddeb nginx-amplify-agent -- -Zgzip
 
 binary: binary-indep binary-arch
 
