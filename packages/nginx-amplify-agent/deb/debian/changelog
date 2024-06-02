@@ -1,3 +1,10 @@
+nginx-amplify-agent (1.8.2-1) stable; urgency=low
+
+  * pyMySQL updated to 1.1.1
+  * requests updated to 2.32.2
+
+ -- Andrei Belov <a.belov@f5.com>  Mon, 27 May 2024 18:05:44 +0400
+
 nginx-amplify-agent (1.8.1-1) stable; urgency=low
 
   * crossplane updated to 0.5.8
