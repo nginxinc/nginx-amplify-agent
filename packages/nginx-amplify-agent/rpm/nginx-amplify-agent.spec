@@ -25,13 +25,6 @@ Requires: python3 >= 3.7
 Requires: python3-requests
 %endif
 
-%if 0%{?rhel} == 8
-Requires: python3 >= 3.6
-Requires: python3-gevent
-Requires: python3-requests
-Requires: python3-netifaces
-%endif
-
 %if 0%{?rhel} == 9
 Requires: python3 >= 3.9
 Requires: python3-requests
@@ -164,6 +157,11 @@ fi
 
 
 %changelog
+* Mon May 27 2024 Andrei Belov <a.belov@f5.com> 1.8.2-1
+- 1.8.2-1
+- pyMySQL updated to 1.1.1
+- requests updated to 2.32.2
+
 * Fri Sep 23 2022 Andrei Belov <a.belov@f5.com> 1.8.1-1
 - 1.8.1-1
 - crossplane updated to 0.5.8
