@@ -7,3 +7,4 @@ rstr==3.0.0
 python-daemon==2.2.4
 ujson==5.4.0
 PyMySQL==1.1.1
+setuptools<=70.3.0

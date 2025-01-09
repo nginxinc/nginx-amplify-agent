@@ -1,0 +1,34 @@
+Source: nginx-amplify-agent
+Homepage: https://github.com/nginxinc/nginx-amplify-agent
+Maintainer: NGINX Packaging <nginx-packaging@f5.com>
+Section: python
+Priority: optional
+Build-Depends: debhelper (>= 13),
+               dpkg-dev (>= 1.22),
+               python3,
+               dh-python
+Standards-Version: 4.5.0
+
+Package: nginx-amplify-agent
+Description: Agent for NGINX Amplify monitoring platform
+ The NGINX Amplify Agent is a small, Python application that provides
+ system and NGINX metric collection. It is part of NGINX Amplify -
+ the monitoring and configuration assistance service for NGINX.
+ .
+ This package installs and runs NGINX Amplify Agent daemon.
+ .
+ See http://nginx.com/amplify for more information
+Architecture: any
+Depends: ${misc:Depends},
+         ${python3:Depends},
+         python3-daemon,
+         python3-setproctitle,
+         python3-greenlet,
+         python3-gevent,
+         python3-requests,
+         python3-ujson,
+         python3-netifaces,
+         python3-pymysql,
+         python3-psutil,
+         lsb-release,
+         adduser

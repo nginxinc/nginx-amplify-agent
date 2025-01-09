@@ -1,0 +1,4 @@
+netaddr==0.8.0
+flup==1.0.3
+crossplane==0.5.8
+rstr==3.0.0
