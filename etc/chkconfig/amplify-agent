@@ -75,9 +75,19 @@ start() {
                 chown -f $user /etc/amplify-agent/agent.conf
                 chown -f $user /var/log/amplify-agent/agent.log
                 daemon --user=$user $binary start --config=$conffile --pid=$pidfile
-        fi;
+        fi
+        RETVAL="$?"
         echo 
-        return $RETVAL
+        if [ "$RETVAL" -ne 0 ]; then
+            return "$RETVAL"
+        fi
+        for i in 1 2 3 4 5; do
+            if [ -e "$pidfile" ]; then
+                return 0
+            fi
+            sleep 1
+        done
+        return 1
 }
 
 stop() {
@@ -123,6 +133,13 @@ debug() {
 
 case "$1" in
   start)
+	if status -p $pidfile amplify-agent >/dev/null 2>&1; then
+		echo "amplify-agent is already running" >&2
+		exit 0
+	fi
+	if [ -e "$pidfile" ]; then
+		rm -f "$pidfile"
+	fi
 	start
 	RETVAL=$?
 	;;
@@ -135,7 +152,7 @@ case "$1" in
 	RETVAL=$?
     ;;
   status)
-    status -p $pidfile amplify-agent
+	status -p $pidfile amplify-agent
 	RETVAL=$?
     ;;
   configtest)

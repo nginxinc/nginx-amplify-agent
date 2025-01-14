@@ -157,6 +157,10 @@ fi
 
 
 %changelog
+* Wed Jan  8 2025 Andrei Belov <a.belov@f5.com> 1.8.3-1
+- 1.8.3-1
+- migrated to the most recent daemonizing logic (PEP 3143)
+
 * Mon May 27 2024 Andrei Belov <a.belov@f5.com> 1.8.2-1
 - 1.8.2-1
 - pyMySQL updated to 1.1.1

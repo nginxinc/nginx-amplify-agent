@@ -19,6 +19,7 @@ COMPAT_LEVELS = {
     'bullseye': 13,
     'jammy': 13,
     'bookworm': 13,
+    'noble': 13,
 }
 
 

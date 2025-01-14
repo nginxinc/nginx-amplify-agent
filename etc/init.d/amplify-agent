@@ -66,7 +66,16 @@ do_start()
     chown -f $USER /var/log/amplify-agent/agent.log
     start-stop-daemon --start --chuid $USER --exec $DAEMON start -- $DAEMON_ARGS
     RETVAL="$?"
-    return "$RETVAL"
+    if [ "$RETVAL" -ne 0 ]; then
+        return "$RETVAL"
+    fi
+    for i in 1 2 3 4 5; do
+        if [ -e "$PIDFILE" ]; then
+            return 0
+        fi
+        sleep 1
+    done
+    return 1
 }
 
 do_stop()
@@ -94,6 +103,13 @@ do_debug() {
 
 case "$1" in
     start)
+        if status_of_proc -p "$PIDFILE" "$DAEMON" "$NAME" >/dev/null 2>&1; then
+            echo " * $NAME is already running" >&2
+            exit 0
+        fi
+        if [ -e "$PIDFILE" ]; then
+            rm -f "$PIDFILE"
+        fi
         [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC " "$NAME"
         do_start
         case "$?" in
