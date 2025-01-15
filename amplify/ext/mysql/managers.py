@@ -174,7 +174,7 @@ class MySQLManager(ExtObjectManager):
             # break processing returning a fault-tolerant empty list
             return []
 
-        if not any('mysqld' in line for line in ps):
+        if not any('mysqld' or 'mariadbd' in line for line in ps):
             context.log.info('no mysqld processes found')
 
             # break processing returning a fault-tolerant empty list
@@ -193,7 +193,7 @@ class MySQLManager(ExtObjectManager):
                 pid, ppid, cmd = parsed  # unpack values
 
                 # match master process
-                if cmd.split(' ', 1)[0].endswith('mysqld'):
+                if cmd.split(' ', 1)[0].endswith('d'):
                     if not launch_method_supported("mysql", ppid):
                         continue
 

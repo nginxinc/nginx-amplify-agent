@@ -12,7 +12,7 @@ __maintainer__ = "Mike Belov"
 __email__ = "dedm@nginx.com"
 
 
-PS_CMD = "ps xao pid,ppid,command | grep -E 'mysqld( |$)'"  # grep -P doesn't work on BSD systems
+PS_CMD = "ps xao pid,ppid,command | grep -E '(mariadb|mysql)d( |$)'"  # grep -P doesn't work on BSD systems
 PS_REGEX = re.compile(r'\s*(?P<pid>\d+)\s+(?P<ppid>\d+)\s+(?P<cmd>.+)\s*')
 
 LS_CMD = "ls -la /proc/%s/exe"
