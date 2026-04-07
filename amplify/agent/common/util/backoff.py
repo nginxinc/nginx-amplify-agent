@@ -32,4 +32,4 @@ def exponential_delay(n):
         (EXPONENTIAL_COEFFICIENT ** n)
     period_size = min(exponential_limit, MAXIMUM_TIMEOUT)
 
-    return randint(0, period_size - 1)
+    return randint(0, int(period_size) - 1)
