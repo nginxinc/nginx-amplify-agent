@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import time
 from os import stat
 
@@ -30,13 +29,13 @@ class FileTail(Pipeline):
     """
 
     def __init__(self, filename):
-        super(FileTail, self).__init__(name='file:%s' % filename)
+        super().__init__(name="file:%s" % filename)
         self.filename = filename
         self._fh = None
 
         # open a file and seek to the end
         if self.filename not in OFFSET_CACHE:
-            with open(self.filename, "r") as f:
+            with open(self.filename, errors="replace") as f:
                 f.seek(0, 2)
                 self._offset = OFFSET_CACHE[self.filename] = f.tell()
         else:
@@ -74,24 +73,23 @@ class FileTail(Pipeline):
         while tries < 2:  # Try twice before moving on.
             try:
                 new_inode = self._st_ino()
-            except:
+            except OSError:
                 time.sleep(0.5)
                 tries += 1
-                pass
             else:
                 break
 
         # If tries == 2 then we know we broke out of the while above manually.
         if tries == 2:
             context.log.error('could not check if file "%s" was rotated (maybe file was deleted?)' % self.filename)
-            context.log.debug('additional info:', exc_info=True)
+            context.log.debug("additional info:", exc_info=True)
             raise StopIteration
 
         # check for copytruncate
         # it will use the same file so inode will stay the same
         file_truncated = False
         if new_inode == self._inode and self.filename in OFFSET_CACHE:
-            with open(self.filename, 'r') as temp_fh:
+            with open(self.filename, errors="replace") as temp_fh:
                 temp_fh.seek(0, 2)
                 if temp_fh.tell() < OFFSET_CACHE[self.filename]:
                     # this means the file is smaller than previously cached
@@ -140,7 +138,7 @@ class FileTail(Pipeline):
                 self._update_inode()
                 self._offset = OFFSET_CACHE[self.filename] = 0
 
-            self._fh = open(self.filename, "r")
+            self._fh = open(self.filename, errors="replace")
             self._fh.seek(self._offset)
         return self._fh
 
@@ -151,4 +149,4 @@ class FileTail(Pipeline):
         line = self._fh.readline()
         if not line:
             raise StopIteration
-        return line.rstrip('\n\r')
+        return line.rstrip("\n\r")
