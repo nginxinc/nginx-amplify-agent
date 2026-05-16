@@ -1,8 +1,9 @@
 import gc
+import socket
 import time
 
 from collections import deque
-from requests.exceptions import HTTPError, ReadTimeout
+from requests.exceptions import ConnectionError as RequestsConnectionError, HTTPError, ReadTimeout
 
 from amplify.agent.common.context import context
 from amplify.agent.common.cloud import HTTP503Error
@@ -125,12 +126,12 @@ class Bridge(AbstractManager):
                 self.http_delay = 0  # Reset HTTP delay on success
                 context.log.debug("successful update, reset http delay")
         except Exception as e:
-            if isinstance(e, ReadTimeout):
+            if self._is_upload_timeout(e):
                 dropped = self._collapse_metric_backlog_on_timeout()
                 if dropped:
                     context.log.warning(
                         f"bridge_manager dropped {dropped} accumulated metric snapshots after "
-                        f"ReadTimeout (kept most recent); link too slow for backlog"
+                        f"upload timeout (kept most recent); link too slow for backlog"
                     )
             self._post_process_payload()  # Convert lists to deques since send failed
 
@@ -217,6 +218,27 @@ class Bridge(AbstractManager):
             "events": deque(maxlen=360),
             "configs": deque(maxlen=360),
         }
+
+    @staticmethod
+    def _is_upload_timeout(e):
+        """True if the exception signals the just-attempted /update/ POST
+        exceeded its time budget while uploading the request body.
+
+        Catches both the clean client-side ``requests.exceptions.ReadTimeout``
+        and the urllib3-wrapped form that fires when an intermediate proxy
+        (CDN / reverse-proxy) closes the slow connection: that surfaces as
+        ``requests.exceptions.ConnectionError('Connection aborted.',
+        timeout('timed out'))``. Both signals mean the same thing for our
+        purposes: drop the accumulated metric backlog so the next cycle
+        doesn't retry the same too-big payload.
+        """
+        if isinstance(e, ReadTimeout):
+            return True
+        if isinstance(e, RequestsConnectionError):
+            for arg in e.args:
+                if isinstance(arg, (socket.timeout, TimeoutError)):
+                    return True
+        return False
 
     def _collapse_metric_backlog_on_timeout(self):
         """
