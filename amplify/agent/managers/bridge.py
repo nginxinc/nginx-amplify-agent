@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 import gc
 import time
 
 from collections import deque
-from requests.exceptions import HTTPError
+from requests.exceptions import HTTPError, ReadTimeout
 
 from amplify.agent.common.context import context
 from amplify.agent.common.cloud import HTTP503Error
@@ -22,12 +21,13 @@ class Bridge(AbstractManager):
     """
     Manager that flushes object bins and stores them in deques.  These deques are then sent to backend.
     """
-    name = 'bridge_manager'
+
+    name = "bridge_manager"
 
     def __init__(self, **kwargs):
-        if 'interval' not in kwargs:
-            kwargs['interval'] = context.app_config['cloud']['push_interval']
-        super(Bridge, self).__init__(**kwargs)
+        if "interval" not in kwargs:
+            kwargs["interval"] = context.app_config["cloud"]["push_interval"]
+        super().__init__(**kwargs)
 
         self.payload = {}
         self.first_run = True
@@ -46,7 +46,7 @@ class Bridge(AbstractManager):
         :return: dict of structure
         """
         # TODO check docker or OS around
-        tree = {'system': ['nginx']}
+        tree = {"system": ["nginx"]}
         return tree
 
     def _run(self):
@@ -54,7 +54,7 @@ class Bridge(AbstractManager):
             self.flush_all()
             gc.collect()
         except:
-            context.default_log.error('failed', exc_info=True)
+            context.default_log.error("failed", exc_info=True)
             raise
 
     def flush_metrics(self):
@@ -63,7 +63,7 @@ class Bridge(AbstractManager):
         """
         flush_data = self._flush_metrics()
         if flush_data:
-            self.payload['metrics'].append(flush_data)
+            self.payload["metrics"].append(flush_data)
         self._send_payload()
 
     def flush_all(self, force=False):
@@ -71,10 +71,10 @@ class Bridge(AbstractManager):
         Flushes all data
         """
         clients = {
-            'meta': self._flush_meta,
-            'metrics': self._flush_metrics,
-            'events': self._flush_events,
-            'configs': self._flush_configs
+            "meta": self._flush_meta,
+            "metrics": self._flush_metrics,
+            "events": self._flush_events,
+            "configs": self._flush_configs,
         }
 
         # Flush data and add to appropriate payload bucket.
@@ -82,7 +82,7 @@ class Bridge(AbstractManager):
             # If this is the first run, flush meta only to ensure object creation.
             flush_data = self._flush_meta()
             if flush_data:
-                self.payload['meta'].append(flush_data)
+                self.payload["meta"].append(flush_data)
         else:
             for client_type in self.payload.keys():
                 if client_type in clients:
@@ -92,8 +92,7 @@ class Bridge(AbstractManager):
 
         now = time.time()
         if force or (
-            now >= (self.last_http_attempt + self.interval + self.http_delay) and
-            now > context.backpressure_time
+            now >= (self.last_http_attempt + self.interval + self.http_delay) and now > context.backpressure_time
         ):
             self._send_payload()
 
@@ -102,13 +101,11 @@ class Bridge(AbstractManager):
         Sends current payload to backend
         """
         context.log.debug(
-            'modified payload; current payload stats: '
-            'meta - %s, metrics - %s, events - %s, configs - %s' % (
-                len(self.payload['meta']),
-                len(self.payload['metrics']),
-                len(self.payload['events']),
-                len(self.payload['configs'])
-            )
+            f"modified payload; current payload stats: "
+            f"meta - {len(self.payload['meta'])}, "
+            f"metrics - {len(self.payload['metrics'])}, "
+            f"events - {len(self.payload['events'])}, "
+            f"configs - {len(self.payload['configs'])}"
         )
 
         # Send payload to backend.
@@ -116,7 +113,7 @@ class Bridge(AbstractManager):
             self.last_http_attempt = time.time()
 
             self._pre_process_payload()  # Convert deques to lists for encoding
-            context.http_client.post('update/', data=self.payload)
+            context.http_client.post("update/", data=self.payload)
             context.default_log.debug(self.payload)
             self._reset_payload()  # Clear payload after successful
 
@@ -126,49 +123,51 @@ class Bridge(AbstractManager):
             if self.http_delay:
                 self.http_fail_count = 0
                 self.http_delay = 0  # Reset HTTP delay on success
-                context.log.debug('successful update, reset http delay')
+                context.log.debug("successful update, reset http delay")
         except Exception as e:
+            if isinstance(e, ReadTimeout):
+                dropped = self._collapse_metric_backlog_on_timeout()
+                if dropped:
+                    context.log.warning(
+                        f"bridge_manager dropped {dropped} accumulated metric snapshots after "
+                        f"ReadTimeout (kept most recent); link too slow for backlog"
+                    )
             self._post_process_payload()  # Convert lists to deques since send failed
 
             if isinstance(e, HTTPError) and e.response.status_code == 503:
                 backpressure_error = HTTP503Error(e)
                 context.backpressure_time = int(time.time() + backpressure_error.delay)
                 context.log.debug(
-                    'back pressure delay %s added (next talk: %s)' % (
-                        backpressure_error.delay,
-                        context.backpressure_time
-                    )
+                    f"back pressure delay {backpressure_error.delay} added (next talk: {context.backpressure_time})"
                 )
             else:
                 self.http_fail_count += 1
                 self.http_delay = exponential_delay(self.http_fail_count)
-                context.log.debug('http delay set to %s (fails: %s)' % (self.http_delay, self.http_fail_count))
+                context.log.debug(f"http delay set to {self.http_delay} (fails: {self.http_fail_count})")
 
             exception_name = e.__class__.__name__
-            context.log.error('failed to push data due to %s' % exception_name)
-            context.log.debug('additional info:', exc_info=True)
+            context.log.error(f"failed to push data due to {exception_name}")
+            context.log.debug("additional info:", exc_info=True)
 
         context.log.debug(
-            'finished flush_all; new payload stats: '
-            'meta - %s, metrics - %s, events - %s, configs - %s' % (
-                len(self.payload['meta']),
-                len(self.payload['metrics']),
-                len(self.payload['events']),
-                len(self.payload['configs'])
-            )
+            f"finished flush_all; new payload stats: "
+            f"meta - {len(self.payload['meta'])}, "
+            f"metrics - {len(self.payload['metrics'])}, "
+            f"events - {len(self.payload['events'])}, "
+            f"configs - {len(self.payload['configs'])}"
         )
 
     def _flush_meta(self):
-        return self._flush(clients=['meta'])
+        return self._flush(clients=["meta"])
 
     def _flush_metrics(self):
-        return self._flush(clients=['metrics'])
+        return self._flush(clients=["metrics"])
 
     def _flush_events(self):
-        return self._flush(clients=['events'])
+        return self._flush(clients=["events"])
 
     def _flush_configs(self):
-        return self._flush(clients=['configs'])
+        return self._flush(clients=["configs"])
 
     def _flush(self, clients=None):
         # get structure
@@ -184,26 +183,26 @@ class Bridge(AbstractManager):
         than object was included in the flush payload and assumes it is non-empty if so."""
         empty = True
         for key in flush_dict.keys():
-            if key != 'object':
+            if key != "object":
                 empty = False
         return empty
 
     def _recursive_object_flush(self, tree, clients=None):
         results = {}
 
-        object_flush = tree['object'].flush(clients=clients)
+        object_flush = tree["object"].flush(clients=clients)
         if object_flush:
             results.update(object_flush)
 
-        if tree['children']:
+        if tree["children"]:
             children_results = []
-            for child_tree in tree['children']:
+            for child_tree in tree["children"]:
                 child_result = self._recursive_object_flush(child_tree, clients=clients)
                 if child_result:
                     children_results.append(child_result)
 
             if children_results:
-                results['children'] = children_results
+                results["children"] = children_results
 
         if not self._empty_flush(results):
             return results
@@ -213,11 +212,31 @@ class Bridge(AbstractManager):
         After payload has been successfully sent, clear the queues (reset them to empty deques).
         """
         self.payload = {
-            'meta': deque(maxlen=360),
-            'metrics': deque(maxlen=360),
-            'events': deque(maxlen=360),
-            'configs': deque(maxlen=360)
+            "meta": deque(maxlen=360),
+            "metrics": deque(maxlen=360),
+            "events": deque(maxlen=360),
+            "configs": deque(maxlen=360),
         }
+
+    def _collapse_metric_backlog_on_timeout(self):
+        """
+        Collapse self.payload['metrics'] to only the most recent snapshot
+        on /update/ ReadTimeout. Returns the number of older snapshots dropped.
+
+        Rationale: a ReadTimeout means the just-attempted POST could not
+        finish within api_timeout. The dominant cause is a backlog of
+        snapshots accumulated during a slow-link or downtime window. The
+        most recent flush is virtually always small (one push_interval of
+        fresh data); keeping just it lets the next cycle proceed instead of
+        repeatedly retrying the same growing batch. meta/events/configs are
+        left alone (small/infrequent by nature).
+        """
+        metrics = self.payload.get("metrics")
+        if not metrics or len(metrics) <= 1:
+            return 0
+        dropped = len(metrics) - 1
+        self.payload["metrics"] = metrics[-1:]
+        return dropped
 
     def _pre_process_payload(self):
         """
